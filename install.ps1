@@ -19,7 +19,7 @@
     Magic Mouse must be paired and connected via Bluetooth before running.
 
 .LINK
-    https://github.com/ArrOwHe4D/apple-magic-mouse-scroll-fix-windows
+    https://github.com/sbagirici/apple-magic-mouse-scroll-fix-windows
 #>
 
 param(
