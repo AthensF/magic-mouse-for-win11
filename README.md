@@ -111,6 +111,24 @@ sc.exe delete applewirelessmouse
 Remove-Item "$env:SystemRoot\System32\drivers\applewirelessmouse.sys"
 ```
 
+## Reverse Scroll Axis
+
+After installing the driver, scroll direction follows Windows default (wheel up = page up). To flip both vertical and horizontal scroll — e.g. to match macOS "natural" scrolling — use `reverse-axis.ps1`:
+
+1. Open **PowerShell as Administrator**
+2. Run:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+.\reverse-axis.ps1
+```
+
+The script auto-detects the Magic Mouse's HID-compliant mouse device, sets `FlipFlopWheel = 1` and `FlipFlopHScroll = 1` in the device's `Device Parameters` registry key, then restarts the device to apply.
+
+To revert to default direction, edit the script and set both values back to `0`, then re-run.
+
+> Note: Windows updates occasionally reset these registry values to `0`. Re-run the script if the scroll direction reverts.
+
 ## Compatibility
 
 | Item | Status |
