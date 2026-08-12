@@ -60,19 +60,17 @@ try {
     "Result: FlipFlopWheel=$($result.FlipFlopWheel) FlipFlopHScroll=$($result.FlipFlopHScroll)" | Out-File $log -Append
     Write-Host "FlipFlopWheel=$($result.FlipFlopWheel) FlipFlopHScroll=$($result.FlipFlopHScroll)" -ForegroundColor Green
 
-    # Restart device to apply
-    try {
-        Disable-PnpDevice -InstanceId $dev -Confirm:$false -ErrorAction Stop
-        Start-Sleep -Seconds 2
-        Enable-PnpDevice -InstanceId $dev -Confirm:$false -ErrorAction Stop
-        Start-Sleep -Seconds 2
-        "Device restarted successfully" | Out-File $log -Append
-        Write-Host "Device restarted. Scroll axis is now $label." -ForegroundColor Green
-    } catch {
-        "Device restart failed: $_" | Out-File $log -Append
-        "A reboot will apply the change." | Out-File $log -Append
-        Write-Host "Device restart skipped — reboot to apply." -ForegroundColor Yellow
-    }
+    # NOTE: We intentionally do NOT restart the device here.
+    # Restarting the HID mouse device can cause the parent Bluetooth HID
+    # device to re-enumerate, which clears the LowerFilters registry key
+    # and detaches Apple's applewirelessmouse scroll driver. The FlipFlop
+    # values apply on the next device power cycle or reboot instead.
+    "Device restart skipped to avoid dropping the scroll driver filter." | Out-File $log -Append
+    Write-Host ""
+    Write-Host "Registry updated. To apply the change, do ONE of the following:" -ForegroundColor Cyan
+    Write-Host "  - Toggle Bluetooth off/on for the Magic Mouse, or" -ForegroundColor Cyan
+    Write-Host "  - Reconnect the mouse, or" -ForegroundColor Cyan
+    Write-Host "  - Reboot your computer" -ForegroundColor Cyan
 } catch {
     "ERROR: $_" | Out-File $log -Append
     Write-Host "ERROR: $_" -ForegroundColor Red
